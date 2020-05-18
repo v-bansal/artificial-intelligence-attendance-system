@@ -35,7 +35,7 @@ def submit():
 # Start capturing video 
          vid_cam = cv2.VideoCapture(0)
 # Detect object in video stream using Haarcascade Frontal Face
-         face_detector = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+         face_detector = cv2.CascadeClassifier('trainer/haarcascade_frontalface_default.xml')
 # Initialize sample face image
          count = 0
          assure_path_exists("dataset/")
@@ -43,15 +43,18 @@ def submit():
 # Start looping
          while(True):
              _, image_frame = vid_cam.read()
+             cv2.imshow('frame', image_frame)
              gray = cv2.cvtColor(image_frame, cv2.COLOR_BGR2GRAY)
              faces = face_detector.detectMultiScale(gray, 1.3, 5)
+             
     
              for (x,y,w,h) in faces:# Loops for each faces
+                 
                  cv2.rectangle(image_frame, (x,y), (x+w,y+h), (0,0,255), 2)# Crop the image frame into rectangle
                  count += 1
                  cv2.imwrite("dataset/User." + str(face_id) + '.' + str(count) + ".jpg", gray[y:y+h,x:x+w])# Save the captured image into the datasets folder
                  font = cv2.FONT_HERSHEY_SIMPLEX # Display the video frame, with bounded rectangle on the person's face
-                 cv2.putText(image_frame,str(face_id),(x,y-10),font,1,(0,0,255),2)
+                 cv2.putText(image_frame,str(name),(x,y-10),font,1,(0,0,255),2)
                  cv2.imshow('frame', image_frame)
              
              if cv2.waitKey(100) & 0xFF == ord('q'):# To stop taking video, press 'q' for at least 100ms
